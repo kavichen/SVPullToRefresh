@@ -181,9 +181,9 @@ static char UIScrollViewPullToRefreshView;
         self.showsDateLabel = NO;
         
         self.titles = [NSMutableArray arrayWithObjects:NSLocalizedString(@"Pull to refresh...",),
-                             NSLocalizedString(@"Release to refresh...",),
-                             NSLocalizedString(@"Loading...",),
-                                nil];
+                       NSLocalizedString(@"Release to refresh...",),
+                       NSLocalizedString(@"Loading...",),
+                       nil];
         
         self.subtitles = [NSMutableArray arrayWithObjects:@"", @"", @"", @"", nil];
         self.viewForState = [NSMutableArray arrayWithObjects:@"", @"", @"", @"", nil];
@@ -281,15 +281,15 @@ static char UIScrollViewPullToRefreshView;
         self.subtitleLabel.text = subtitle.length > 0 ? subtitle : nil;
         
         
-//        CGSize titleSize = [self.titleLabel.text sizeWithFont:self.titleLabel.font
-//                                            constrainedToSize:CGSizeMake(labelMaxWidth,self.titleLabel.font.lineHeight)
-//                                                lineBreakMode:self.titleLabel.lineBreakMode];
-         CGSize titleSize = [self.titleLabel sizeThatFits:CGSizeMake(labelMaxWidth,self.titleLabel.font.lineHeight)];
+        //        CGSize titleSize = [self.titleLabel.text sizeWithFont:self.titleLabel.font
+        //                                            constrainedToSize:CGSizeMake(labelMaxWidth,self.titleLabel.font.lineHeight)
+        //                                                lineBreakMode:self.titleLabel.lineBreakMode];
+        CGSize titleSize = [self.titleLabel sizeThatFits:CGSizeMake(labelMaxWidth,self.titleLabel.font.lineHeight)];
         
         
-//        CGSize subtitleSize = [self.subtitleLabel.text sizeWithFont:self.subtitleLabel.font
-//                                                  constrainedToSize:CGSizeMake(labelMaxWidth,self.subtitleLabel.font.lineHeight)
-//                                                      lineBreakMode:self.subtitleLabel.lineBreakMode];
+        //        CGSize subtitleSize = [self.subtitleLabel.text sizeWithFont:self.subtitleLabel.font
+        //                                                  constrainedToSize:CGSizeMake(labelMaxWidth,self.subtitleLabel.font.lineHeight)
+        //                                                      lineBreakMode:self.subtitleLabel.lineBreakMode];
         CGSize subtitleSize = [self.subtitleLabel sizeThatFits:CGSizeMake(labelMaxWidth,self.subtitleLabel.font.lineHeight)];
         
         CGFloat maxLabelWidth = MAX(titleSize.width,subtitleSize.width);
@@ -389,7 +389,7 @@ static char UIScrollViewPullToRefreshView;
     }
     else if([keyPath isEqualToString:@"frame"])
         [self layoutSubviews];
-
+    
 }
 
 - (void)scrollViewDidScroll:(CGPoint)contentOffset {
@@ -683,66 +683,17 @@ static char UIScrollViewPullToRefreshView;
 }
 
 - (void)drawRect:(CGRect)rect {
-	CGContextRef c = UIGraphicsGetCurrentContext();
-	
-	// the rects above the arrow
-	CGContextAddRect(c, CGRectMake(5, 0, 12, 4)); // to-do: use dynamic points
-	CGContextAddRect(c, CGRectMake(5, 6, 12, 4)); // currently fixed size: 22 x 48pt
-	CGContextAddRect(c, CGRectMake(5, 12, 12, 4));
-	CGContextAddRect(c, CGRectMake(5, 18, 12, 4));
-	CGContextAddRect(c, CGRectMake(5, 24, 12, 4));
-	CGContextAddRect(c, CGRectMake(5, 30, 12, 4));
-	
-	// the arrow
-	CGContextMoveToPoint(c, 0, 34);
-	CGContextAddLineToPoint(c, 11, 48);
-	CGContextAddLineToPoint(c, 22, 34);
-	CGContextAddLineToPoint(c, 0, 34);
-	CGContextClosePath(c);
-	
-	CGContextSaveGState(c);
-	CGContextClip(c);
-	
-	// Gradient Declaration
-	CGColorSpaceRef colorSpace = CGColorSpaceCreateDeviceRGB();
-	CGFloat alphaGradientLocations[] = {0, 0.8f};
+    CGContextRef c = UIGraphicsGetCurrentContext();
+    CGContextMoveToPoint(c, 11, 15);
+    CGContextAddLineToPoint(c, 11, 28);
     
-	CGGradientRef alphaGradient = nil;
-    if([[[UIDevice currentDevice] systemVersion]floatValue] >= 5){
-        NSArray* alphaGradientColors = [NSArray arrayWithObjects:
-                                        (id)[self.arrowColor colorWithAlphaComponent:0].CGColor,
-                                        (id)[self.arrowColor colorWithAlphaComponent:1].CGColor,
-                                        nil];
-        alphaGradient = CGGradientCreateWithColors(colorSpace, (__bridge CFArrayRef)alphaGradientColors, alphaGradientLocations);
-    }else{
-        const CGFloat * components = CGColorGetComponents([self.arrowColor CGColor]);
-        size_t numComponents = CGColorGetNumberOfComponents([self.arrowColor CGColor]);
-        CGFloat colors[8];
-        switch(numComponents){
-            case 2:{
-                colors[0] = colors[4] = components[0];
-                colors[1] = colors[5] = components[0];
-                colors[2] = colors[6] = components[0];
-                break;
-            }
-            case 4:{
-                colors[0] = colors[4] = components[0];
-                colors[1] = colors[5] = components[1];
-                colors[2] = colors[6] = components[2];
-                break;
-            }
-        }
-        colors[3] = 0;
-        colors[7] = 1;
-        alphaGradient = CGGradientCreateWithColorComponents(colorSpace,colors,alphaGradientLocations,2);
-    }
-	
-	
-	CGContextDrawLinearGradient(c, alphaGradient, CGPointZero, CGPointMake(0, rect.size.height), 0);
+    CGContextMoveToPoint(c, 11, 33);
+    CGContextAddLineToPoint(c, 3, 25);
+    CGContextMoveToPoint(c, 11, 33);
+    CGContextAddLineToPoint(c, 19, 25);
     
-	CGContextRestoreGState(c);
-	
-	CGGradientRelease(alphaGradient);
-	CGColorSpaceRelease(colorSpace);
+    CGContextSetLineWidth(c, 1.2);
+    CGContextSetStrokeColorWithColor(c, [self.arrowColor CGColor]);
+    CGContextDrawPath(c, kCGPathStroke);
 }
 @end
